@@ -10,26 +10,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-         - run: chmod +x gradlew
+      - run: chmod +x gradlew
       - uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
       - run: ./gradlew build
-      - uses: actions/create-release@v1
-        id: create_release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: softprops/action-gh-release@v1
         with:
           tag_name: v1.0.0
-          release_name: Release v1.0.0
-          draft: false
-          prerelease: false
-      - uses: actions/upload-release-asset@v1
+          name: Release v1.0.0
+          files: ./build/libs/ZenithPearlPlugin-1.0.0.jar
+          generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build/libs/ZenithPearlPlugin-1.0.0.jar
-          asset_name: ZenithPearlPlugin-1.0.0.jar
-          asset_content_type: application/java-archive
