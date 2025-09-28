@@ -1,0 +1,37 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
+
+group = 'com.example'
+version = '1.0.0'
+sourceCompatibility = '21'
+targetCompatibility = '21'
+
+repositories {
+    mavenCentral()
+    maven { url 'https://maven.2b2t.vc/releases' }
+}
+
+dependencies {
+    compileOnly 'com.zenith:ZenithProxy:1.21.4-SNAPSHOT'
+    compileOnly 'com.zenith:ZenithProxy-plugin-api:1.21.4-SNAPSHOT'
+}
+
+jar {
+    from {
+        configurations.compileOnly.findAll { it.name.endsWith('jar') }.collect { zipTree(it) }
+    }
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = group
+            artifactId = 'zenith-pearl-plugin'
+            version = version
+
+            from components.java
+        }
+    }
+}
